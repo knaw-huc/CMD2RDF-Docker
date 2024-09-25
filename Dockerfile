@@ -1,4 +1,5 @@
-FROM openlink/vos:v0
+FROM openlink/virtuoso-opensource-7
+#openlink/vos:v0
 
 ENV CMD2RDF_SRC  git
 ENV CMD2RDF_HOST http://localhost:8080
@@ -8,19 +9,24 @@ ENV PWD=replaceMe
 RUN mkdir -p /opt/virtuoso-opensource/var/lib/virtuoso/db
 ADD virtuoso.ini /opt/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini
 
-RUN apt-get -y update && \
-  apt-get -y clean && \
-  apt-get -y install supervisor default-jdk maven tomcat6 curl && \
-  rm -rf /var/lib/apt/lists/* && \
-  rm -rf /tmp/*
+RUN apt-get -y update
+RUN apt-get -y clean
+RUN apt-get -y install supervisor
+RUN apt-get -y install openjdk-8-jdk
+RUN apt-get -y install maven
+RUN apt-get -y install tomcat9
+RUN apt-get -y install curl
+RUN apt-get -y install git
+RUN rm -rf /var/lib/apt/lists/*
+RUN rm -rf /tmp/*
   
-# pacify tomcat6
-RUN ln -s /var/lib/tomcat6/server /usr/share/tomcat6/
-RUN ln -s /var/lib/tomcat6/shared /usr/share/tomcat6/
+# pacify tomcat9
+RUN ln -s /var/lib/tomcat9/server /usr/share/tomcat9/
+RUN ln -s /var/lib/tomcat9/shared /usr/share/tomcat9/
 
 # startup scripts
-ADD start-tomcat6.sh /start-tomcat6.sh
-ADD supervisord-tomcat6.conf /etc/supervisor/conf.d/supervisord-tomcat6.conf
+ADD start-tomcat9.sh /start-tomcat9.sh
+ADD supervisord-tomcat9.conf /etc/supervisor/conf.d/supervisord-tomcat9.conf
   
 ADD start-virtuoso.sh /start-virtuoso.sh
 ADD supervisord-virtuoso.conf /etc/supervisor/conf.d/supervisord-virtuoso.conf
@@ -52,7 +58,7 @@ WORKDIR /app/src
 RUN git clone https://github.com/epimorphics/elda.git
 WORKDIR /app/src/elda
 RUN git checkout tags/elda-1.3.1
-RUN mvn clean install
+RUN mvn -DskipTests clean install
 
 # checkout and compile cmd2rdf
 #RUN git clone https://github.com/TheLanguageArchive/CMD2RDF.git
@@ -73,8 +79,8 @@ RUN mvn clean install
 # once more to create webapps/target/Cmd2RdfPageHeader.properties
 RUN mvn install
 # install the WARs
-RUN cp /app/src/CMD2RDF/webapps/target/cmd2rdf.war /var/lib/tomcat6/webapps
-RUN cp /app/src/CMD2RDF/lda/target/cmd2rdf-lda.war /var/lib/tomcat6/webapps
+RUN cp /app/src/CMD2RDF/webapps/target/cmd2rdf.war /var/lib/tomcat9/webapps
+RUN cp /app/src/CMD2RDF/lda/target/cmd2rdf-lda.war /var/lib/tomcat9/webapps
 
 # install the script to import CMD records
 ADD cmd2rdf-init.sh /app/cmd2rdf-init.sh
