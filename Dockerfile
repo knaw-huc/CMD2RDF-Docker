@@ -65,13 +65,6 @@ RUN sed -i "s|http://localhost:8080|$CMD2RDF_HOST|g" /app/ld/*.graph
 # move VLO orgs to the harvester dir
 # NOTE: orgs isn't in the new CLAVAS
 RUN mv /app/ld/meertens-VLO-orgs.rdf /app/work/harvester/meertens-VLO-orgs.rdf
-  
-# Prime the local Maven cache with the required version of elda
-#WORKDIR /app/src
-#RUN git clone https://github.com/epimorphics/elda.git
-#WORKDIR /app/src/elda
-#RUN git checkout tags/elda-1.3.17
-#RUN mvn -s /app/settings.xml -DskipTests clean install
 
 # checkout and compile cmd2rdf
 #RUN git clone https://github.com/TheLanguageArchive/CMD2RDF.git
