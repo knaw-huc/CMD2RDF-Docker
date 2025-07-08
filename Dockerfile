@@ -5,7 +5,7 @@ ENV CMD2RDF_SRC=git
 ENV CMD2RDF_HOST=http://localhost:8080
 ENV CMD2RDF_HOME=/app
 ENV ADMIN=admin
-ENV PWD=secret
+ENV PWD=replaceMe
 RUN mkdir -p /opt/virtuoso-opensource/var/lib/virtuoso/db
 ADD virtuoso.ini /opt/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini
 
