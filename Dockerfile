@@ -5,7 +5,7 @@ ENV CMD2RDF_SRC=git
 ENV CMD2RDF_HOST=http://localhost:8080
 ENV CMD2RDF_HOME=/app
 ENV ADMIN=admin
-ENV PWD=replaceMe
+ENV PASS=replaceMe
 RUN mkdir -p /opt/virtuoso-opensource/var/lib/virtuoso/db
 ADD virtuoso.ini /opt/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini
 
@@ -17,7 +17,7 @@ RUN apt-get -y install maven
 RUN apt-get -y install curl
 RUN apt-get -y install git
 RUN apt-get -y install wget
-RUN apt-get -y install unzip
+RUN apt-get -y install bzip2
 RUN rm -rf /var/lib/apt/lists/*
 RUN rm -rf /tmp/*
 
@@ -74,11 +74,11 @@ WORKDIR /app/src
 RUN /app/get-cmd2rdf.sh
 RUN sed -i "s|/app|$CMD2RDF_HOME|g" /app/src/CMD2RDF/webapps/src/main/webapp/WEB-INF/web.xml
 RUN sed -i "s|/app|$CMD2RDF_HOME|g" /app/src/CMD2RDF/batch/src/main/resources/cmd2rdf.xml
-RUN sed -i "s|Put here a strong password!|$PWD|g" /app/src/CMD2RDF/batch/src/main/resources/cmd2rdf.xml
+RUN sed -i "s|Put here a strong password!|${PASS}|g" /app/src/CMD2RDF/batch/src/main/resources/cmd2rdf.xml
 RUN sed -i "s|http://localhost:8080|$CMD2RDF_HOST|g" /app/src/CMD2RDF/batch/src/main/resources/cmd2rdf.xml
 RUN sed -i "s|http://192.168.99.100:8080|$CMD2RDF_HOST|g" /app/src/CMD2RDF/lda/src/main/webapp/specs/cmd2rdf-lda.ttl
 RUN sed -i "s|ADMIN|${ADMIN}|g" /app/src/CMD2RDF/webapps/src/main/java/nl/knaw/dans/cmd2rdf/webapps/ui/service/UserService.java
-RUN sed -i "s|PWD|${PWD}|g" /app/src/CMD2RDF/webapps/src/main/java/nl/knaw/dans/cmd2rdf/webapps/ui/service/UserService.java
+RUN sed -i "s|PWD|${PASS}|g" /app/src/CMD2RDF/webapps/src/main/java/nl/knaw/dans/cmd2rdf/webapps/ui/service/UserService.java
 RUN rm /app/get-cmd2rdf.sh
 WORKDIR /app/src/CMD2RDF
 RUN mvn -s /app/settings.xml clean install
