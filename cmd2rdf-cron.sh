@@ -4,7 +4,7 @@ HOME="/app"
 WORK="/app/work"
 DATA="/app/data/clarin"
 
-SRC="https://vlo.clarin.eu/data/resultsets"
+SRC="https://vlo.clarin.eu/resultsets"
 SET="clarin.tar.bz2"
 
 # make sure expected dirs exist
@@ -39,4 +39,4 @@ tar xjf $WORK/$SET
 
 # start import
 cd $HOME
-exec $HOME/cmd2rdf-run.sh > $WORK/cmd2rdf-`date '+%Y%m%d'`.log 2>&1
+exec $HOME/cmd2rdf-run.sh > $WORK/cmd2rdf-"$(date '+%Y%m%d')".log 2>&1

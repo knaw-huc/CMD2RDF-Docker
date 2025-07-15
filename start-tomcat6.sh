@@ -7,7 +7,7 @@ function shutdown()
     date
     echo "Shutting down Tomcat"
     
-    /etc/init.d/tomcat6 stop
+    /opt/tomcat6/bin/shutdown.sh
 
     WAIT="0"
 }
@@ -15,7 +15,7 @@ function shutdown()
 date
 echo "Starting Tomcat"
 
-/etc/init.d/tomcat6 start
+/opt/tomcat6/bin/startup.sh
 
 # Allow any signal which would kill a process to stop Tomcat
 trap shutdown HUP INT QUIT ABRT KILL ALRM TERM TSTP

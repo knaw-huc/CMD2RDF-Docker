@@ -1,0 +1,12 @@
+<!-- Maven settings file -->
+<settings>
+    <mirrors>
+        <!-- Disable Maven HTTP blocking for the public Epimorphics repository -->
+        <mirror>
+            <id>epimorphics-pub-mirror</id>
+            <name>Epimorphics HTTP mirror</name>
+            <url>https://repository.epimorphics.com</url>
+            <mirrorOf>epi-public-repo</mirrorOf>
+        </mirror>
+    </mirrors>
+</settings>
