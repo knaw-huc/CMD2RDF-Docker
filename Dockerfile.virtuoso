@@ -13,4 +13,7 @@ ADD supervisord-virtuoso.conf /etc/supervisor/conf.d/supervisord-virtuoso.conf
 ADD run.sh /run.sh
 RUN chmod 755 /*.sh
 
+EXPOSE 1111
+EXPOSE 8890
+
 CMD ["/run.sh"]
