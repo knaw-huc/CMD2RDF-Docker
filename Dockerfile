@@ -55,7 +55,8 @@ RUN mkdir -p /app/src && \
     mkdir -p /app/work/profiles-cache && \
     mkdir -p /app/work/rdf-output && \
     mkdir -p /app/work/rdf-output/temp && \
-    mkdir -p /app/ld
+    mkdir -p /app/ld && \
+    mkdir -p /app/vlo
 
 # add the linked data sets showcasing enrichment    
 ADD ld/* /app/ld/
