@@ -8,8 +8,6 @@ services:
       - "1111:1111"
     volumes:
       - virtuoso_data:/opt/virtuoso-opensource/var/lib/virtuoso/db
-    environment:
-      VIRTUOSO_DBA_PASSWORD: dba
 
   cmd2rdf:
     build:
