@@ -1,3 +1,5 @@
+FROM openlink/virtuoso-opensource-7:latest as isql-extractor
+
 FROM ubuntu:latest
 
 ENV CMD2RDF_SRC=git
@@ -29,9 +31,10 @@ RUN cd && wget https://archive.apache.org/dist/tomcat/tomcat-6/v6.0.53/bin/apach
     rm apache-tomcat-6.0.53.tar.gz && \
     chmod +x /opt/tomcat6/bin/*.sh
 
-# pacify tomcat9
-#RUN ln -s /var/lib/tomcat9/server /usr/share/tomcat9/
-#RUN ln -s /var/lib/tomcat9/shared /usr/share/tomcat9/
+# Copy isql from Virtuoso image
+COPY --from=isql-extractor /opt/virtuoso-opensource/bin/isql /usr/bin/isql
+COPY --from=isql-extractor /opt/virtuoso-opensource/lib /usr/lib/
+ENV LD_LIBRARY_PATH=/usr/lib
 
 # Add Maven settings file
 ADD settings.xml /app/settings.xml
