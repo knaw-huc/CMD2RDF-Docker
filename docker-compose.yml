@@ -12,6 +12,16 @@ services:
     environment:
       VIRTUOSO_DBA_PASSWORD: dba
 
+  graphdb:
+    build:
+      context: .
+      dockerfile: Dockerfile.graphdb
+    ports:
+      - "7200:7200"
+    volumes:
+      - shared-ld:/app/ld
+      - shared-rdf:/app/work/rdf-output/temp
+
   cmd2rdf:
     build:
       context: .

@@ -5,7 +5,7 @@ FROM ubuntu:latest
 ENV CMD2RDF_SRC=git
 ENV CMD2RDF_HOST=http://localhost:8080
 ENV CMD2RDF_HOME=/app
-ENV STORE_HOST=http://virtuoso:8890
+ENV STORE_HOST=http://graphdb:7200
 ENV ADMIN=admin
 ENV PASS=replaceMe
 

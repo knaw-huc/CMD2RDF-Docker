@@ -1,0 +1,21 @@
+FROM ontotext/graphdb:10.8.9
+
+RUN apt-get update && \
+    apt-get install -y supervisor && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY supervisord-graphdb.conf /etc/supervisor/conf.d/supervisord-graphdb.conf
+
+WORKDIR /app
+
+COPY graphdb-clarin-repo.ttl /app/graphdb/graphdb-clarin-repo.ttl
+
+COPY graphdb-init.sh /graphdb-init.sh
+COPY start-graphdb.sh /start-graphdb.sh
+COPY run.sh /run.sh
+RUN chmod +x /*.sh
+
+EXPOSE 7200
+
+ENTRYPOINT ["/run.sh"]
