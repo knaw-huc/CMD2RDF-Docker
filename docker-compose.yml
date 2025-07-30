@@ -9,6 +9,7 @@ services:
     volumes:
       - shared-ld:/app/ld
       - shared-rdf:/app/work/rdf-output/temp
+      - virtuoso-db:/opt/virtuoso-opensource/var/lib/virtuoso/db
     environment:
       VIRTUOSO_DBA_PASSWORD: dba
 
@@ -19,10 +20,10 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - /Users/listj/Clarin.Data:/clarin-data
       - shared-ld:/app/ld
       - shared-rdf:/app/work/rdf-output/temp
 
 volumes:
+  virtuoso-db:
   shared-ld:
   shared-rdf:
