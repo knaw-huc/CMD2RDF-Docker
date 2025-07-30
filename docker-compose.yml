@@ -1,0 +1,28 @@
+services:
+  virtuoso:
+    build:
+      context: .
+      dockerfile: Dockerfile.virtuoso
+    ports:
+      - "8890:8890"
+      - "1111:1111"
+    volumes:
+      - shared-ld:/app/ld
+      - shared-rdf:/app/work/rdf-output/temp
+    environment:
+      VIRTUOSO_DBA_PASSWORD: dba
+
+  cmd2rdf:
+    build:
+      context: .
+      dockerfile: Dockerfile.cmd2rdf
+    ports:
+      - "8080:8080"
+    volumes:
+      - /Users/listj/Clarin.Data:/clarin-data
+      - shared-ld:/app/ld
+      - shared-rdf:/app/work/rdf-output/temp
+
+volumes:
+  shared-ld:
+  shared-rdf:
