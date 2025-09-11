@@ -1,4 +1,4 @@
-FROM openlink/virtuoso-opensource-7:latest as isql-extractor
+FROM openlink/virtuoso-opensource-7:latest AS isql-extractor
 
 FROM ubuntu:latest
 

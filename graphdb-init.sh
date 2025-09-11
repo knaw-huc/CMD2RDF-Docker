@@ -2,8 +2,8 @@
 set -e
 
 GRAPHDB_URL=http://localhost:7200
-REPO_ID=clarin
-CONFIG_FILE=/app/graphdb/graphdb-clarin-repo.ttl
+REPO_ID=cmd2rdf
+CONFIG_FILE=/app/graphdb/graphdb-repo.ttl
 
 until curl -s "$GRAPHDB_URL/rest/repositories" > /dev/null; do
     echo "Waiting for GraphDB..."

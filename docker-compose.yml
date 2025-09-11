@@ -1,17 +1,4 @@
 services:
-  virtuoso:
-    build:
-      context: .
-      dockerfile: Dockerfile.virtuoso
-    ports:
-      - "8890:8890"
-      - "1111:1111"
-    volumes:
-      - shared-ld:/app/ld
-      - shared-rdf:/app/work/rdf-output/temp
-    environment:
-      VIRTUOSO_DBA_PASSWORD: dba
-
   graphdb:
     build:
       context: .
@@ -22,6 +9,15 @@ services:
       - shared-ld:/app/ld
       - shared-rdf:/app/work/rdf-output/temp
 
+  graphdb-proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile.graphdb-proxy
+    depends_on:
+      - graphdb
+    ports:
+      - "8890:8080"
+
   cmd2rdf:
     build:
       context: .
@@ -29,7 +25,6 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - /Users/listj/Clarin.Data:/clarin-data
       - shared-ld:/app/ld
       - shared-rdf:/app/work/rdf-output/temp
 
