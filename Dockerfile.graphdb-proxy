@@ -1,9 +1,0 @@
-FROM nginx:1.29.1-alpine
-
-ENV REPO_ID=cmd2rdf
-
-RUN apk add --no-cache curl
-
-COPY nginx-graphdb-proxy.conf /etc/nginx/nginx.conf
-
-RUN sed -i "s|REPO_ID|$REPO_ID|g" /etc/nginx/nginx.conf
