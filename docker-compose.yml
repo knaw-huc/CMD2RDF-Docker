@@ -8,6 +8,7 @@ services:
     volumes:
       - shared-ld:/app/ld
       - shared-rdf:/app/work/rdf-output/temp
+      - graphdb-repositories:/opt/graphdb/dist/data/repositories
 
   cmd2rdf:
     build:
@@ -22,3 +23,4 @@ services:
 volumes:
   shared-ld:
   shared-rdf:
+  graphdb-repositories:
