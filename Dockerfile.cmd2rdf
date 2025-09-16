@@ -1,5 +1,3 @@
-FROM openlink/virtuoso-opensource-7:latest AS isql-extractor
-
 FROM ubuntu:latest
 
 ENV CMD2RDF_SRC=git
@@ -26,15 +24,10 @@ RUN rm -rf /tmp/*
 # since Tomcat9 is no longer available as a package for Ubuntu)
 WORKDIR /app
 RUN cd && wget https://archive.apache.org/dist/tomcat/tomcat-6/v6.0.53/bin/apache-tomcat-6.0.53.tar.gz && \
-    tar -zxvf apache-tomcat-6.0.53.tar.gz && \
-    mv apache-tomcat-6.0.53 /opt/tomcat6 &&  \
-    rm apache-tomcat-6.0.53.tar.gz && \
-    chmod +x /opt/tomcat6/bin/*.sh
-
-# Copy isql from Virtuoso image
-COPY --from=isql-extractor /opt/virtuoso-opensource/bin/isql /usr/bin/isql
-COPY --from=isql-extractor /opt/virtuoso-opensource/lib /usr/lib/
-ENV LD_LIBRARY_PATH=/usr/lib
+     tar -zxvf apache-tomcat-6.0.53.tar.gz && \
+     mv apache-tomcat-6.0.53 /opt/tomcat6 &&  \
+     rm apache-tomcat-6.0.53.tar.gz && \
+     chmod +x /opt/tomcat6/bin/*.sh
 
 # Add Maven settings file
 ADD settings.xml /app/settings.xml
@@ -42,7 +35,6 @@ ADD settings.xml /app/settings.xml
 # Add startup scripts
 ADD start-tomcat6.sh /start-tomcat6.sh
 ADD supervisord-tomcat6.conf /etc/supervisor/conf.d/supervisord-tomcat6.conf
-
 ADD run.sh /run.sh
 RUN chmod 755 /*.sh
 
