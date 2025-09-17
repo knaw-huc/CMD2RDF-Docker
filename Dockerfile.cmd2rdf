@@ -59,7 +59,6 @@ RUN sed -i "s|http://localhost:8080|$CMD2RDF_HOST|g" /app/ld/*.graph
 RUN mv /app/ld/meertens-VLO-orgs.rdf /app/work/harvester/meertens-VLO-orgs.rdf
 
 # checkout and compile cmd2rdf
-#RUN git clone https://github.com/TheLanguageArchive/CMD2RDF.git
 ADD get-cmd2rdf.sh /app
 RUN chmod +x /app/get-cmd2rdf.sh
 WORKDIR /app/src

@@ -6,8 +6,6 @@ services:
     ports:
       - "7200:7200"
     volumes:
-      - shared-ld:/app/ld
-      - shared-rdf:/app/work/rdf-output/temp
       - graphdb-repositories:/opt/graphdb/dist/data/repositories
 
   cmd2rdf:
@@ -17,10 +15,8 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - shared-ld:/app/ld
-      - shared-rdf:/app/work/rdf-output/temp
+      - app-data:/app/data
 
 volumes:
-  shared-ld:
-  shared-rdf:
   graphdb-repositories:
+  app-data:

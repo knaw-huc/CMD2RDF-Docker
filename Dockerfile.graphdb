@@ -1,4 +1,4 @@
-FROM ontotext/graphdb:10.8.9
+FROM ontotext/graphdb:11.1.1
 
 ENV REPO_ID=cmd2rdf
 
@@ -15,6 +15,8 @@ COPY graphdb-repo.ttl /app/graphdb/graphdb-repo.ttl
 
 RUN sed -i "s|REPO_ID|$REPO_ID|g" /app/graphdb/graphdb-repo.ttl
 
+RUN mkdir -p /opt/graphdb/dist/work
+COPY graphdb.license /opt/graphdb/dist/work
 COPY graphdb-init.sh /graphdb-init.sh
 COPY start-graphdb.sh /start-graphdb.sh
 COPY run.sh /run.sh
