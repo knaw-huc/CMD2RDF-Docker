@@ -1,5 +1,5 @@
 #!/bin/sh
-set -euo pipefail
+set -eu
 
 echo "Waiting for GraphDB..."
 if curl -fsS "$GDB_URL/rest/repositories/$REPO_ID" >/dev/null 2>&1; then
