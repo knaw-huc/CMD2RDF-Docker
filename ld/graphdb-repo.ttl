@@ -5,8 +5,8 @@
 @prefix graphdb: <http://www.ontotext.com/config/graphdb#>.
 
 [] a rep:Repository ;
-    rep:repositoryID "REPO_ID" ;
-    rdfs:label "REPO_ID Repository TTL file." ;
+    rep:repositoryID "cmd2rdf" ;
+    rdfs:label "CMD2RDF Repository TTL file." ;
     rep:repositoryImpl [
         rep:repositoryType "graphdb:SailRepository" ;
         sr:sailImpl [

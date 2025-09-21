@@ -1,22 +1,45 @@
 services:
   graphdb:
-    build:
-      context: .
-      dockerfile: Dockerfile.graphdb
+    image: ontotext/graphdb:11.1.1
+    container_name: graphdb
     ports:
       - "7200:7200"
     volumes:
-      - graphdb-repositories:/opt/graphdb/dist/data/repositories
+      - graphdb-home:/opt/graphdb/home
+      - ./ld/graphdb.license:/opt/graphdb/home/conf/graphdb.license
+    healthcheck:
+      test: [ "CMD", "curl", "-fsS", "http://localhost:7200/protocol" ]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    restart: unless-stopped
+
+  graphdb-init:
+    image: curlimages/curl:latest
+    container_name: graphdb-init
+    depends_on:
+      graphdb:
+        condition: service_healthy
+    volumes:
+      - ./ld:/app/ld:ro
+    environment:
+      - REPO_ID=${REPO_ID:-cmd2rdf}
+      - GDB_URL=${GDB_URL:-http://graphdb:7200}
+      # This is taken from the old Virtuoso bulk import file - is this IRI truly correct?
+      - INIT_GRAPH_URI=${INIT_GRAPH_URI:-http://eko.indarto/eko.rdf}
+    entrypoint: [ "/app/ld/graphdb-init.sh" ]
+    restart: no
 
   cmd2rdf:
+    container_name: cmd2rdf
     build:
       context: .
       dockerfile: Dockerfile.cmd2rdf
     ports:
       - "8080:8080"
     volumes:
-      - app-data:/app/data
+      - cmd2rdf-home:/app/data
 
 volumes:
-  graphdb-repositories:
-  app-data:
+  graphdb-home:
+  cmd2rdf-home:

@@ -1,9 +1,5 @@
-#!/usr/bin/env bash
+#!/bin/sh
 set -euo pipefail
-
-GRAPHDB_URL="http://graphdb:7200"
-REPO_ID="cmd2rdf"
-GRAPH_URI="http://eko.indarto/eko.rdf"
 
 echo "Uploading *.n3 as text/n3..."
 for f in /app/ld/*.n3; do
@@ -12,7 +8,7 @@ for f in /app/ld/*.n3; do
   curl -s -X POST \
     -H "Content-Type: text/n3" \
     --data-binary @"$f" \
-    "$GRAPHDB_URL/repositories/$REPO_ID/statements?context=%3C${GRAPH_URI//\//%2F}%3E"
+    "$GDB_URL/repositories/$REPO_ID/statements?context=%3C${INIT_GRAPH_URI//\//%2F}%3E"
 done
 
 echo "Uploading *.rdf as application/rdf+xml..."
@@ -22,7 +18,7 @@ for f in /app/ld/*.rdf; do
   curl -s -X POST \
     -H "Content-Type: application/rdf+xml" \
     --data-binary @"$f" \
-    "$GRAPHDB_URL/repositories/$REPO_ID/statements?context=%3C${GRAPH_URI//\//%2F}%3E"
+    "$GDB_URL/repositories/$REPO_ID/statements?context=%3C${INIT_GRAPH_URI//\//%2F}%3E"
 done
 
 echo "Finished."
