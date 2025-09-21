@@ -24,6 +24,7 @@ Then you can run software from the cmd2rdf Docker container:
 
 - cmd2rdf-cron.sh: a shell file for downloading CLARIN harvesting results and unpacking them.
 - cmd2rdf-run.sh: a shell file for importing the CLARIN harvesting results into GraphDB.
+- cmd2rdf-init.sh: a shell file for importing initial graph data into GraphDB. When you create a new repo from scratch, this is done for you, but you can use this file to (re)import yourself if desired.
 
 Make sure to modify the configuration of CM2RDF to point to the correct CMDI XML directory:
 
