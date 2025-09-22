@@ -7,6 +7,15 @@ services:
     volumes:
       - graphdb-home:/opt/graphdb/home
       - ./ld/graphdb.license:/opt/graphdb/home/conf/graphdb.license
+    environment:
+      GDB_HEAP_SIZE: 24g
+      GDB_JAVA_OPTS: >- 
+        -Dgraphdb.workbench.cors.enable=true
+        -Dgraphdb.append.request.id.headers=true
+        -Denable-context-index=true
+        -Dentity-pool-implementation=transactional
+        -Dhealth.max.query.time.seconds=500
+        -Dreuse.vars.in.subselects=true
     healthcheck:
       test: [ "CMD", "curl", "-fsS", "http://localhost:7200/protocol" ]
       interval: 5s

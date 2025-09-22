@@ -3,12 +3,12 @@ set -eu
 
 ENCODED_URI=$(printf '%s' "$INIT_GRAPH_URI" | sed 's|/|%2F|g')
 
-echo "Uploading *.n3 as text/n3..."
+echo "Uploading *.n3 as text/turtle..."
 for f in /app/ld/*.n3; do
   [ -e "$f" ] || continue
   echo " -> $f"
   curl -s -X POST \
-    -H "Content-Type: text/n3" \
+    -H "Content-Type: text/turtle" \
     --data-binary @"$f" \
     "$GDB_URL/repositories/$REPO_ID/statements?context=%3C${ENCODED_URI}%3E"
 done
