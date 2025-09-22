@@ -12,6 +12,7 @@ RUN apt-get -y install maven
 RUN apt-get -y install curl
 RUN apt-get -y install git
 RUN apt-get -y install vim
+RUN apt-get -y install bzip2
 RUN rm -rf /var/lib/apt/lists/*
 RUN rm -rf /tmp/*
 
