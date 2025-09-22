@@ -39,6 +39,8 @@ services:
       - "8080:8080"
     volumes:
       - cmd2rdf-home:/app/data
+    tty: true
+    stdin_open: true
 
 volumes:
   graphdb-home:
