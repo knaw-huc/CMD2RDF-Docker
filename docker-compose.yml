@@ -8,7 +8,6 @@ services:
       - graphdb-home:/opt/graphdb/home
       - ./ld/graphdb.license:/opt/graphdb/home/conf/graphdb.license
     environment:
-      GDB_HEAP_SIZE: 24g
       GDB_JAVA_OPTS: >- 
         -Dgraphdb.workbench.cors.enable=true
         -Dgraphdb.append.request.id.headers=true
@@ -22,6 +21,7 @@ services:
       timeout: 3s
       retries: 30
     restart: unless-stopped
+    stop_grace_period: 90s
 
   graphdb-init:
     image: curlimages/curl:latest
@@ -48,6 +48,11 @@ services:
       - "8080:8080"
     volumes:
       - cmd2rdf-home:/app/data
+    environment:
+      - REPO_ID=${REPO_ID:-cmd2rdf}
+      # This is taken from the old Virtuoso bulk import file - is this IRI truly correct?
+      - GDB_URL=${GDB_URL:-http://graphdb:7200}
+      - INIT_GRAPH_URI=${INIT_GRAPH_URI:-http://eko.indarto/eko.rdf}
     tty: true
     stdin_open: true
 
