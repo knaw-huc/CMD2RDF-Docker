@@ -21,7 +21,7 @@ WORKDIR /app
 # Add Maven settings file
 ADD settings.xml /app/settings.xml
 
-# make the directory structure
+# Make the directory structure
 RUN mkdir -p /app/src && \
     mkdir -p /app/data && \
     mkdir -p /app/work && \
@@ -30,7 +30,9 @@ RUN mkdir -p /app/src && \
     mkdir -p /app/work/rdf-output && \
     mkdir -p /app/work/rdf-output/temp && \
     mkdir -p /app/ld && \
-    mkdir -p /app/vlo
+    mkdir -p /app/vlo && \
+    mkdir -p /app/logs && \
+    mkdir -p /app/logs/cmd2rdf
 
 # add the linked data sets showcasing enrichment
 ADD ld/* /app/ld/

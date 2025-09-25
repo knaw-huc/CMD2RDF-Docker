@@ -47,7 +47,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - cmd2rdf-home:/app/data
+      - cmd2rdf-home:/app
     environment:
       - REPO_ID=${REPO_ID:-cmd2rdf}
       # This is taken from the old Virtuoso bulk import file - is this IRI truly correct?
