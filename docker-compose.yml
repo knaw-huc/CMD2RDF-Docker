@@ -1,20 +1,23 @@
 services:
   graphdb:
-    image: ontotext/graphdb:11.1.1
+    image: ontotext/graphdb:10.8.11
     container_name: graphdb
     ports:
       - "7200:7200"
-    volumes:
-      - graphdb-home:/opt/graphdb/home
-      - ./ld/graphdb.license:/opt/graphdb/home/conf/graphdb.license
     environment:
-      GDB_JAVA_OPTS: >- 
+      GDB_JAVA_OPTS: >-
+        -Xmx2g 
+        -Xms1g
+        -XX:MaxDirectMemorySize=32g
+        -Dgraphdb.home=/opt/graphdb/home
         -Dgraphdb.workbench.cors.enable=true
         -Dgraphdb.append.request.id.headers=true
         -Denable-context-index=true
         -Dentity-pool-implementation=transactional
         -Dhealth.max.query.time.seconds=500
         -Dreuse.vars.in.subselects=true
+    volumes:
+        - graphdb-home:/opt/graphdb/home
     healthcheck:
       test: [ "CMD", "curl", "-fsS", "http://localhost:7200/protocol" ]
       interval: 5s
