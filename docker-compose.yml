@@ -1,29 +1,64 @@
 services:
-  virtuoso:
-    build:
-      context: .
-      dockerfile: Dockerfile.virtuoso
+  graphdb:
+    image: ontotext/graphdb:10.8.11
+    container_name: graphdb
     ports:
-      - "8890:8890"
-      - "1111:1111"
-    volumes:
-      - shared-ld:/app/ld
-      - shared-rdf:/app/work/rdf-output/temp
-      - virtuoso-db:/opt/virtuoso-opensource/var/lib/virtuoso/db
+      - "7200:7200"
     environment:
-      VIRTUOSO_DBA_PASSWORD: dba
+      GDB_JAVA_OPTS: >-
+        -Xmx2g 
+        -Xms1g
+        -XX:MaxDirectMemorySize=32g
+        -Dgraphdb.home=/opt/graphdb/home
+        -Dgraphdb.workbench.cors.enable=true
+        -Dgraphdb.append.request.id.headers=true
+        -Denable-context-index=true
+        -Dentity-pool-implementation=transactional
+        -Dhealth.max.query.time.seconds=500
+        -Dreuse.vars.in.subselects=true
+    volumes:
+        - graphdb-home:/opt/graphdb/home
+    healthcheck:
+      test: [ "CMD", "curl", "-fsS", "http://localhost:7200/protocol" ]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    restart: unless-stopped
+    stop_grace_period: 90s
+
+  graphdb-init:
+    image: curlimages/curl:latest
+    container_name: graphdb-init
+    depends_on:
+      graphdb:
+        condition: service_healthy
+    volumes:
+      - ./ld:/app/ld:ro
+    environment:
+      - REPO_ID=${REPO_ID:-cmd2rdf}
+      - GDB_URL=${GDB_URL:-http://graphdb:7200}
+      # This is taken from the old Virtuoso bulk import file - is this IRI truly correct?
+      - INIT_GRAPH_URI=${INIT_GRAPH_URI:-http://eko.indarto/eko.rdf}
+    entrypoint: [ "/app/ld/graphdb-init.sh" ]
+    restart: no
 
   cmd2rdf:
+    container_name: cmd2rdf
     build:
       context: .
       dockerfile: Dockerfile.cmd2rdf
     ports:
       - "8080:8080"
     volumes:
-      - shared-ld:/app/ld
-      - shared-rdf:/app/work/rdf-output/temp
+      - cmd2rdf-home:/app
+    environment:
+      - REPO_ID=${REPO_ID:-cmd2rdf}
+      # This is taken from the old Virtuoso bulk import file - is this IRI truly correct?
+      - GDB_URL=${GDB_URL:-http://graphdb:7200}
+      - INIT_GRAPH_URI=${INIT_GRAPH_URI:-http://eko.indarto/eko.rdf}
+    tty: true
+    stdin_open: true
 
 volumes:
-  virtuoso-db:
-  shared-ld:
-  shared-rdf:
+  graphdb-home:
+  cmd2rdf-home:

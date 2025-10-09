@@ -1,3 +1,3 @@
 #!/bin/sh
 
-/app/ld/virtuoso_bulk_import.sh
+/app/ld/graphdb_bulk_import.sh
