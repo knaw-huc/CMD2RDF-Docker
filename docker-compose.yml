@@ -35,7 +35,7 @@ services:
     volumes:
       - ./ld:/app/ld:ro
     environment:
-      - REPO_ID=${REPO_ID:-cmd2rdf}
+      - REPO_ID=${REPO_ID:-ost-clarin-skg}
       - GDB_URL=${GDB_URL:-http://graphdb:7200}
       # This is taken from the old Virtuoso bulk import file - is this IRI truly correct?
       - INIT_GRAPH_URI=${INIT_GRAPH_URI:-http://eko.indarto/eko.rdf}
@@ -52,7 +52,7 @@ services:
     volumes:
       - cmd2rdf-home:/app
     environment:
-      - REPO_ID=${REPO_ID:-cmd2rdf}
+      - REPO_ID=${REPO_ID:-ost-clarin-skg}
       # This is taken from the old Virtuoso bulk import file - is this IRI truly correct?
       - GDB_URL=${GDB_URL:-http://graphdb:7200}
       - INIT_GRAPH_URI=${INIT_GRAPH_URI:-http://eko.indarto/eko.rdf}
