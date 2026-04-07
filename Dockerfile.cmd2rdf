@@ -18,9 +18,6 @@ RUN rm -rf /tmp/*
 
 WORKDIR /app
 
-# Add Maven settings file
-ADD settings.xml /app/settings.xml
-
 # Make the directory structure
 RUN mkdir -p /app/src && \
     mkdir -p /app/data && \
@@ -54,9 +51,7 @@ RUN sed -i "s|http://localhost:8890|$STORE_HOST|g" /app/src/CMD2RDF/batch/src/ma
 RUN sed -i "s|http://localhost:8080|$CMD2RDF_HOST|g" /app/src/CMD2RDF/batch/src/main/resources/cmd2rdf.xml
 RUN rm /app/get-cmd2rdf.sh
 WORKDIR /app/src/CMD2RDF
-RUN mvn -s /app/settings.xml clean install
-# once more to create webapps/target/Cmd2RdfPageHeader.properties
-RUN mvn -s /app/settings.xml install
+RUN mvn clean install
 
 # Install the script to import CMD records
 ADD cmd2rdf-init.sh /app/cmd2rdf-init.sh

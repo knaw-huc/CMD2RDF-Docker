@@ -6,9 +6,8 @@ services:
       - "7200:7200"
     environment:
       GDB_JAVA_OPTS: >-
-        -Xmx2g 
-        -Xms1g
-        -XX:MaxDirectMemorySize=32g
+        -Xmx8g 
+        -Xms4g
         -Dgraphdb.home=/opt/graphdb/home
         -Dgraphdb.workbench.cors.enable=true
         -Dgraphdb.append.request.id.headers=true
