@@ -13,6 +13,4 @@ curl -fsS -X POST \
      "$GDB_URL/rest/repositories"
 echo "Repository created."
 
-/app/ld/graphdb_bulk_import.sh
-
 exit 0
