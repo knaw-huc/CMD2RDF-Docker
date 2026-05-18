@@ -48,6 +48,4 @@ RUN mvn clean install -q --no-transfer-progress && \
 COPY cmd2rdf-cron.sh cmd2rdf-run.sh /app/
 RUN chmod 755 /app/*.sh
 
-EXPOSE 8080
-
 WORKDIR /app
