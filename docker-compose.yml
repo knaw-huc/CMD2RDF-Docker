@@ -24,6 +24,8 @@ services:
       retries: 30
     restart: unless-stopped
     stop_grace_period: 90s
+    profiles:
+      - cmd2rdf-local
 
   graphdb-init:
     image: curlimages/curl:latest
@@ -36,10 +38,10 @@ services:
     environment:
       - REPO_ID=${REPO_ID:-ost-clarin-skg}
       - GDB_URL=${GDB_URL:-http://graphdb:7200}
-      # This is taken from the old Virtuoso bulk import file - is this IRI truly correct?
-      - INIT_GRAPH_URI=${INIT_GRAPH_URI:-http://eko.indarto/eko.rdf}
     entrypoint: [ "/app/ld/graphdb-init.sh" ]
     restart: no
+    profiles:
+      - cmd2rdf-local
 
   cmd2rdf:
     container_name: cmd2rdf
@@ -52,9 +54,7 @@ services:
       - cmd2rdf-home:/app
     environment:
       - REPO_ID=${REPO_ID:-ost-clarin-skg}
-      # This is taken from the old Virtuoso bulk import file - is this IRI truly correct?
       - GDB_URL=${GDB_URL:-http://graphdb:7200}
-      - INIT_GRAPH_URI=${INIT_GRAPH_URI:-http://eko.indarto/eko.rdf}
     tty: true
     stdin_open: true
 
