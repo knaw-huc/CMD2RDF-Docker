@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cmd2rdf
+spec:
+  replicas: 1
+  # replicas: 0 # use this when you do not use the container. Kee.ps the deployment alive, but no pods running
+  selector:
+    matchLabels:
+      app: cmd2rdf
+  template:
+    metadata:
+      labels:
+        app: cmd2rdf
+    spec:
+      containers:
+        - name: cmd2rdf
+          image: registry.diginfra.net/tsd/cmd2rdf:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: REPO_ID
+              value: "ost-clarin-skg"
+            - name: GDB_URL
+              value: "http://graphdb:7200"
+          volumeMounts:
+            - name: cmd2rdf-home
+              mountPath: /app/data
+          stdin: true
+          tty: true
+      volumes:
+        - name: cmd2rdf-home
+          persistentVolumeClaim:
+            claimName: cmd2rdf-home

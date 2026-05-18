@@ -5,56 +5,47 @@ ENV CMD2RDF_HOST=http://localhost:8080
 ENV CMD2RDF_HOME=/app
 ENV STORE_HOST=http://graphdb:7200
 
-RUN apt-get -y update
-RUN apt-get -y clean
-RUN apt-get -y install openjdk-8-jdk
-RUN apt-get -y install maven
-RUN apt-get -y install curl
-RUN apt-get -y install git
-RUN apt-get -y install vim
-RUN apt-get -y install bzip2
-RUN rm -rf /var/lib/apt/lists/*
-RUN rm -rf /tmp/*
+RUN apt-get -y update && \
+    apt-get -y install --no-install-recommends \
+        openjdk-8-jdk \
+        maven \
+        curl \
+        git \
+        bzip2 && \
+    rm -rf /var/lib/apt/lists/* /tmp/*
 
 WORKDIR /app
 
-# Make the directory structure
-RUN mkdir -p /app/src && \
-    mkdir -p /app/data && \
-    mkdir -p /app/work && \
-    mkdir -p /app/work/harvester && \
-    mkdir -p /app/work/profiles-cache && \
-    mkdir -p /app/work/rdf-output && \
-    mkdir -p /app/work/rdf-output/temp && \
-    mkdir -p /app/ld && \
-    mkdir -p /app/vlo && \
-    mkdir -p /app/logs && \
-    mkdir -p /app/logs/cmd2rdf
+RUN mkdir -p \
+    /app/src \
+    /app/data \
+    /app/work/harvester \
+    /app/work/profiles-cache \
+    /app/work/rdf-output/temp \
+    /app/ld \
+    /app/vlo \
+    /app/logs/cmd2rdf
 
-# add the linked data sets showcasing enrichment
-ADD ld/* /app/ld/
-RUN chmod 755 /app/ld/*.sh
+COPY ld/* /app/ld/
+RUN chmod 755 /app/ld/*.sh && \
+    mv /app/ld/meertens-VLO-orgs.rdf /app/work/harvester/meertens-VLO-orgs.rdf
 
-# move VLO orgs to the harvester dir
-# NOTE: orgs isn't in the new CLAVAS
-RUN mv /app/ld/meertens-VLO-orgs.rdf /app/work/harvester/meertens-VLO-orgs.rdf
-
-# Checkout and compile cmd2rdf
-ADD get-cmd2rdf.sh /app
+COPY get-cmd2rdf.sh /app/get-cmd2rdf.sh
 RUN chmod +x /app/get-cmd2rdf.sh
-WORKDIR /app/src
-RUN /app/get-cmd2rdf.sh
-RUN sed -i "s|/app|$CMD2RDF_HOME|g" /app/src/CMD2RDF/batch/src/main/resources/cmd2rdf.xml
-RUN sed -i "s|Put here a strong password!|${PASS}|g" /app/src/CMD2RDF/batch/src/main/resources/cmd2rdf.xml
-RUN sed -i "s|http://localhost:8890|$STORE_HOST|g" /app/src/CMD2RDF/batch/src/main/resources/cmd2rdf.xml
-RUN sed -i "s|http://localhost:8080|$CMD2RDF_HOST|g" /app/src/CMD2RDF/batch/src/main/resources/cmd2rdf.xml
-RUN rm /app/get-cmd2rdf.sh
-WORKDIR /app/src/CMD2RDF
-RUN mvn clean install
 
-# Install the script to fetch and import CMD records
-ADD cmd2rdf-cron.sh /app/cmd2rdf-cron.sh
-ADD cmd2rdf-run.sh /app/cmd2rdf-run.sh
+WORKDIR /app/src
+RUN /app/get-cmd2rdf.sh && \
+    sed -i "s|/app|$CMD2RDF_HOME|g"                  /app/src/CMD2RDF/batch/src/main/resources/cmd2rdf.xml && \
+    sed -i "s|Put here a strong password!|${PASS}|g" /app/src/CMD2RDF/batch/src/main/resources/cmd2rdf.xml && \
+    sed -i "s|http://localhost:8890|$STORE_HOST|g"   /app/src/CMD2RDF/batch/src/main/resources/cmd2rdf.xml && \
+    sed -i "s|http://localhost:8080|$CMD2RDF_HOST|g" /app/src/CMD2RDF/batch/src/main/resources/cmd2rdf.xml && \
+    rm /app/get-cmd2rdf.sh
+
+WORKDIR /app/src/CMD2RDF
+RUN mvn clean install -q --no-transfer-progress && \
+    rm -rf /root/.m2/repository
+
+COPY cmd2rdf-cron.sh cmd2rdf-run.sh /app/
 RUN chmod 755 /app/*.sh
 
 EXPOSE 8080
