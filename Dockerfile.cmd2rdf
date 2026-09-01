@@ -7,7 +7,7 @@ ENV STORE_HOST=http://graphdb:7200
 
 RUN apt-get -y update && \
     apt-get -y install --no-install-recommends \
-        openjdk-8-jdk \
+        openjdk-25-jdk \
         maven \
         curl \
         git \
