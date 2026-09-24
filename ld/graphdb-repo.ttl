@@ -1,3 +1,6 @@
+#
+# RDF4J configuration template for a GraphDB repository
+#
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix rep: <http://www.openrdf.org/config/repository#>.
 @prefix sr: <http://www.openrdf.org/config/repository/sail#>.
@@ -6,16 +9,17 @@
 
 [] a rep:Repository ;
     rep:repositoryID "ost-clarin-skg" ;
-    rdfs:label "OST CLARIN SKG Repository TTL file." ;
+    rdfs:label "OST CLARIN SKG Repository" ;
     rep:repositoryImpl [
         rep:repositoryType "graphdb:SailRepository" ;
         sr:sailImpl [
             sail:sailType "graphdb:Sail" ;
 
             graphdb:read-only "false" ;
+
             # Inference and Validation
-            graphdb:ruleset "rdfsplus-optimized" ;
-            graphdb:disable-sameAs "true" ;
+            graphdb:ruleset "owl-horst-optimized" ;
+            graphdb:disable-sameAs "false" ;
             graphdb:check-for-inconsistencies "false" ;
 
             # Indexing
